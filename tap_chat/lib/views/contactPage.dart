@@ -4,7 +4,7 @@ import 'package:tap_chat/connection/xmpp_connection.dart';
 import 'package:tap_chat/contact/contactPageDelegate.dart';
 import 'package:tap_chat/contact/contactsHandler.dart';
 import 'package:tap_chat/dto/contactDto.dart';
-import 'package:tap_chat/models/Contact.dart';
+import 'package:tap_chat/models/contact.dart';
 import 'package:tap_chat/views/theme_colors.dart';
 import 'package:tap_chat/widgets/contactList.dart';
 import 'package:xmpp_stone/xmpp_stone.dart';
@@ -56,10 +56,8 @@ class _ContactPageState extends State<ContactPage> with ContactPageDelegate {
   void UpdateState(List<Buddy> buddies) {
     setState(() {
       contacts = buddies
-          .map((value) => new Contact(
-              jid: value.jid,
-              name: value.name,
-              imageURL: "lib/images/default.png"))
+          .map((value) =>
+              new Contact(value.jid, value.name, "lib/images/default.png"))
           .toList();
       _progressVisible = false;
     });
@@ -68,10 +66,8 @@ class _ContactPageState extends State<ContactPage> with ContactPageDelegate {
   @override
   void UpdateSubscribers(ContactDto contactDto) {
     setState(() {
-      var contact = Contact(
-          jid: contactDto.jid,
-          name: contactDto.name,
-          imageURL: "lib/images/default.png");
+      var contact =
+          Contact(contactDto.jid, contactDto.name, "lib/images/default.png");
       subscribers.add(contact);
     });
   }
