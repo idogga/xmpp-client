@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tap_chat/connection/user_creditionals.dart';
 import 'package:tap_chat/connection/xmpp_connection.dart';
+import 'package:tap_chat/Authorization/Auth.dart';
 import 'package:tap_chat/views/contactPage.dart';
 import 'package:tap_chat/views/profilePage.dart';
 
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),
-      home: MyHomePage(title: 'Chats'),
+      home: LoginIn(),
     );
   }
 }
