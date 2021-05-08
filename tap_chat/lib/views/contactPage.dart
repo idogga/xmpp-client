@@ -52,19 +52,17 @@ class _ContactPageState extends State<ContactPage> with ContactPageDelegate {
   @override
   void UpdateState(List<Buddy> buddies) {
     setState(() {
-      contacts = buddies
-          .map((value) =>
-              new Contact(value.jid, value.name, "lib/images/default.png"))
-          .toList();
-      _progressVisible = false;
+      // contacts = buddies
+      //     .map((value) => new Contact(value.jid, value.name, FileImage(null)))
+      //     .toList();
+      // _progressVisible = false;
     });
   }
 
   @override
   void UpdateSubscribers(ContactDto contactDto) {
     setState(() {
-      var contact =
-          Contact(contactDto.jid, contactDto.name, "lib/images/default.png");
+      var contact = Contact(contactDto.jid, contactDto.name, contactDto.image);
       subscribers.add(contact);
     });
   }
@@ -142,7 +140,7 @@ class _ContactPageState extends State<ContactPage> with ContactPageDelegate {
       itemBuilder: (context, index) {
         return ContactList(
           name: contacts[index].name,
-          imageUrl: contacts[index].imageURL,
+          image: contacts[index].image,
         );
       },
     );
@@ -157,7 +155,7 @@ class _ContactPageState extends State<ContactPage> with ContactPageDelegate {
       itemBuilder: (context, index) {
         return ContactList(
           name: subscribers[index].name,
-          imageUrl: subscribers[index].imageURL,
+          image: subscribers[index].image,
         );
       },
     );

@@ -45,7 +45,8 @@ class ContactsHandler {
       if (streamEvent.type == xmpp.SubscriptionEventType.REQUEST) {
         var vcard = cardManager.getVCardFor(streamEvent.jid);
         vcard.asStream().listen((event) {
-          var contactDto = ContactDto(streamEvent.jid, event.nickName, "");
+          var image = FileImage(event.imageData);
+          var contactDto = ContactDto(streamEvent.jid, event.nickName, image);
           _contactPageDelegate.UpdateSubscribers(contactDto);
         });
       }
