@@ -23,6 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  intl: ^0.16.1
   shared_preferences: ^2.0.5
   xmpp_stone: ^0.3.3
 
