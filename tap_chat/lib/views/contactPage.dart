@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tap_chat/connection/user_creditionals.dart';
+import 'package:tap_chat/connection/chat_center.dart';
 import 'package:tap_chat/connection/xmpp_connection.dart';
 import 'package:tap_chat/contact/contactPageDelegate.dart';
 import 'package:tap_chat/contact/contactsHandler.dart';
@@ -11,16 +11,17 @@ import 'package:xmpp_stone/xmpp_stone.dart';
 
 class ContactPage extends StatefulWidget {
   XmppConnection connection;
-  ContactPage(this.connection);
+  ChatCenter chatCenter;
+  ContactPage(this.connection, this.chatCenter);
   @override
-  _ContactPageState createState() => _ContactPageState();
+  _ContactPageState createState() => _ContactPageState(connection);
 }
 
 class _ContactPageState extends State<ContactPage> with ContactPageDelegate {
   bool _progressVisible = true;
 
-  _ContactPageState() {
-    var _ = new ContactsHandler(widget.connection, this);
+  _ContactPageState(XmppConnection connection) {
+    var _ = new ContactsHandler(connection, this);
   }
 
   List<Contact> contacts = [];
@@ -140,10 +141,7 @@ class _ContactPageState extends State<ContactPage> with ContactPageDelegate {
       padding: EdgeInsets.only(top: 16),
       physics: NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
-        return ContactList(
-          name: contacts[index].name,
-          imageUrl: contacts[index].imageURL,
-        );
+        return ContactList(contacts[index], widget.chatCenter);
       },
     );
   }
@@ -155,10 +153,7 @@ class _ContactPageState extends State<ContactPage> with ContactPageDelegate {
       padding: EdgeInsets.only(top: 16),
       physics: NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
-        return ContactList(
-          name: subscribers[index].name,
-          imageUrl: subscribers[index].imageURL,
-        );
+        return ContactList(subscribers[index], widget.chatCenter);
       },
     );
   }
