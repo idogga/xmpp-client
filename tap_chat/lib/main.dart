@@ -61,7 +61,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> _children = [ContactPage(), _chatPage, ProfilePage()];
+    final List<Widget> _children = [
+      ContactPage(_connection),
+      _chatPage,
+      ProfilePage()
+    ];
 
     return Scaffold(
       body: _children[_currentIndex],

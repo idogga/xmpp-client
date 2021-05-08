@@ -13,7 +13,7 @@ class UserCreditionals {
 
   String get domain => 'tap';
 
-  String get jid => '$userName@$domain';
+  String get jid => '$userName';
 
   void SetUser(String login, String pass) {
     password = pass;

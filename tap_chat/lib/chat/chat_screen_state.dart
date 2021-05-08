@@ -153,7 +153,7 @@ class ChatScreenState extends State<ChatScreen> {
                       )
                     : Container(
                         child: Image.asset(
-                          'images/${message.text}.gif',
+                          'images/${message.text.replaceAll(RegExp('\{'), '').replaceAll(RegExp('\}'), '')}.gif',
                           width: 100.0,
                           height: 100.0,
                           fit: BoxFit.cover,
@@ -312,7 +312,9 @@ class ChatScreenState extends State<ChatScreen> {
                           valueColor: AlwaysStoppedAnimation<Color>(
                               ThemeColors.accent)));
                 } else {
-                  listMessage.insert(0, snapshot.data);
+                  if (!listMessage.any((mess) =>
+                      mess.messageStanza.id == snapshot.data.messageStanza.id))
+                    listMessage.insert(0, snapshot.data);
                   return ListView.builder(
                     padding: EdgeInsets.all(10.0),
                     itemBuilder: (context, index) =>

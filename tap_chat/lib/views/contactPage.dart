@@ -10,6 +10,8 @@ import 'package:tap_chat/widgets/contactList.dart';
 import 'package:xmpp_stone/xmpp_stone.dart';
 
 class ContactPage extends StatefulWidget {
+  XmppConnection connection;
+  ContactPage(this.connection);
   @override
   _ContactPageState createState() => _ContactPageState();
 }
@@ -17,13 +19,8 @@ class ContactPage extends StatefulWidget {
 class _ContactPageState extends State<ContactPage> with ContactPageDelegate {
   bool _progressVisible = true;
 
-  ContactsHandler _contactsHandler;
-  XmppConnection _connection;
-
   _ContactPageState() {
-    _connection = new XmppConnection(new UserCreditionals());
-    _connection.connect();
-    _contactsHandler = new ContactsHandler(_connection, this);
+    var _ = new ContactsHandler(widget.connection, this);
   }
 
   List<Contact> contacts = [];

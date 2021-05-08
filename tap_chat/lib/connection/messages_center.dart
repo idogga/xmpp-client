@@ -12,7 +12,7 @@ class MessageCenter {
     var chat = _chatManager.getChat(jid);
     chat.newMessageStream.listen((message) {
       print(message.text);
-      onRecieve(message);
+      //onRecieve(message);
     });
   }
 }

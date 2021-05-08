@@ -5,7 +5,6 @@ import 'package:tap_chat/dto/contactDto.dart';
 import 'package:xmpp_stone/xmpp_stone.dart' as xmpp;
 
 class ContactsHandler {
-  
   xmpp.Connection _connection;
 
   ContactPageDelegate _contactPageDelegate;
@@ -14,7 +13,8 @@ class ContactsHandler {
 
   xmpp.PresenceManager _presenceManager;
 
-  ContactsHandler(XmppConnection connection, ContactPageDelegate contactPageDelegate){
+  ContactsHandler(
+      XmppConnection connection, ContactPageDelegate contactPageDelegate) {
     _connection = connection.GetConnection();
 
     var presenceManager = xmpp.PresenceManager.getInstance(_connection);
@@ -45,20 +45,16 @@ class ContactsHandler {
       if (streamEvent.type == xmpp.SubscriptionEventType.REQUEST) {
         var vcard = cardManager.getVCardFor(streamEvent.jid);
         vcard.asStream().listen((event) {
-          var contactDto = ContactDto(jid: streamEvent.jid, name: event.nickName, imageURL: "");
+          var contactDto = ContactDto(streamEvent.jid, event.nickName, "");
           _contactPageDelegate.UpdateSubscribers(contactDto);
         });
       }
-      if (streamEvent.type == xmpp.SubscriptionEventType.ACCEPTED) {
-        
-      }
-      if (streamEvent.type == xmpp.SubscriptionEventType.DECLINED) {
-
-      }
+      if (streamEvent.type == xmpp.SubscriptionEventType.ACCEPTED) {}
+      if (streamEvent.type == xmpp.SubscriptionEventType.DECLINED) {}
     });
   }
 
-  void sendBuddies(){
+  void sendBuddies() {
     var buddies = _rosterManager.getRoster();
     _contactPageDelegate.UpdateState(buddies);
   }
