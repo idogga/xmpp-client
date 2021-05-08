@@ -3,6 +3,7 @@ import 'package:tap_chat/connection/user_creditionals.dart';
 import 'package:tap_chat/connection/xmpp_connection.dart';
 import 'package:tap_chat/contact/contactPageDelegate.dart';
 import 'package:tap_chat/contact/contactsHandler.dart';
+import 'package:tap_chat/dto/contactDto.dart';
 import 'package:tap_chat/models/Contact.dart';
 import 'package:tap_chat/widgets/contactList.dart';
 import 'package:xmpp_stone/xmpp_stone.dart';
@@ -27,6 +28,8 @@ class _ContactPageState extends State<ContactPage> with ContactPageDelegate{
 
   List<Contact> contacts = [];
 
+  List<Contact> subscribers = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,6 +40,10 @@ class _ContactPageState extends State<ContactPage> with ContactPageDelegate{
           children: <Widget>[
             GetTitle(),
             GetSearch(),
+            GetSubscribesList(),
+            Divider(
+                  color: Colors.black,
+                ),
             GetContactList(),
             GetProgressIndicator(),
           ],
@@ -48,8 +55,16 @@ class _ContactPageState extends State<ContactPage> with ContactPageDelegate{
   @override
   void UpdateState(List<Buddy> buddies) {
     setState(() {
-      contacts = buddies.map((value) => new Contact(name: value.name, imageURL: "lib/images/default.png")).toList();
+      contacts = buddies.map((value) => new Contact(jid:value.jid ,name: value.name, imageURL: "lib/images/default.png")).toList();
       _progressVisible = false;
+    });
+  }
+
+    @override
+  void UpdateSubscribers(ContactDto contactDto) {
+    setState(() {
+      var contact = Contact(jid: contactDto.jid, name: contactDto.name, imageURL: "lib/images/default.png");
+      subscribers.add(contact);
     });
   }
 
@@ -114,6 +129,21 @@ class _ContactPageState extends State<ContactPage> with ContactPageDelegate{
                 return ContactList(
                   name: contacts[index].name,
                   imageUrl: contacts[index].imageURL,
+                );
+              },
+            );
+  }
+
+  Widget GetSubscribesList(){
+    return ListView.builder(
+              itemCount: subscribers.length,
+              shrinkWrap: true,
+              padding: EdgeInsets.only(top: 16),
+              physics: NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index){
+                return ContactList(
+                  name: subscribers[index].name,
+                  imageUrl: subscribers[index].imageURL,
                 );
               },
             );
