@@ -13,7 +13,7 @@ import 'package:xmpp_stone/xmpp_stone.dart';
 class ContactPage extends StatefulWidget {
   XmppConnection connection;
   ChatCenter chatCenter;
-  String filter;
+  String filter = '';
 
   ContactPage(this.connection, this.chatCenter);
   @override
@@ -174,12 +174,12 @@ class _ContactPageState extends State<ContactPage> with ContactPageDelegate {
 
   Widget getContactList() {
     return ListView.builder(
-      itemCount: getFilteredSubscribers().length,
+      itemCount: getFilteredContacts().length,
       shrinkWrap: true,
       padding: EdgeInsets.only(top: 16),
       physics: NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
-        return ContactList(getFilteredSubscribers()[index], widget.chatCenter);
+        return ContactList(getFilteredContacts()[index], widget.chatCenter);
       },
     );
   }
