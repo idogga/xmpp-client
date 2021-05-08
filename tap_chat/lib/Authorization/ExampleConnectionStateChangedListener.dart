@@ -27,6 +27,14 @@ class ExampleConnectionStateChangedListener
             pageBuilder: (BuildContext context, _, __) => ErrorLogin()));
   }
 
+  void ServerNotFount() {
+    Navigator.push(
+        _context,
+        PageRouteBuilder(
+            opaque: false,
+            pageBuilder: (BuildContext context, _, __) => NotFountServer()));
+  }
+
   //войти
   void loginIn() async {
     //уведомление загрузки диалогов
@@ -51,9 +59,11 @@ class ExampleConnectionStateChangedListener
   void onConnectionStateChanged(xmpp.XmppConnectionState state) {
     if (state == xmpp.XmppConnectionState.Authenticated) {
       loginIn();
+      return;
     }
     if (state == xmpp.XmppConnectionState.AuthenticationFailure) {
       loginError();
+      return;
     }
     if (state == xmpp.XmppConnectionState.Ready) {
       print('Connected');
