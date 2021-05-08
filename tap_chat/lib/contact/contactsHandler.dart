@@ -15,13 +15,12 @@ class ContactsHandler {
 
   ContactsHandler(
       XmppConnection connection, ContactPageDelegate contactPageDelegate) {
+    connection.connect();
     _connection = connection.connection;
 
     var presenceManager = xmpp.PresenceManager.getInstance(_connection);
     var rosterManager = xmpp.RosterManager.getInstance(_connection);
     var cardManager = xmpp.VCardManager.getInstance(_connection);
-
-    var jid = xmpp.Jid.fromFullJid("admin@tap");
 
     _contactPageDelegate = contactPageDelegate;
     _rosterManager = rosterManager;
@@ -31,21 +30,11 @@ class ContactsHandler {
       sendBuddies();
     });
 
-    presenceManager.subscribe(jid);
-
-    presenceManager.errorStream.listen((event) {
-      var b = event;
-    });
-
-    presenceManager.presenceStream.listen((event) {
-      var b = event.jid;
-    });
-
     presenceManager.subscriptionStream.listen((streamEvent) {
       if (streamEvent.type == xmpp.SubscriptionEventType.REQUEST) {
         var vcard = cardManager.getVCardFor(streamEvent.jid);
         vcard.asStream().listen((event) {
-          var contactDto = ContactDto(streamEvent.jid, event.nickName, "");
+          var contactDto = ContactDto(streamEvent.jid, event.nickName ?? streamEvent.jid.local, "");
           _contactPageDelegate.UpdateSubscribers(contactDto);
         });
       }
