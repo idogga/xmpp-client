@@ -1,9 +1,0 @@
-import 'package:flutter/cupertino.dart';
-
-class Chat{
-  String name;
-  String messageText;
-  String imageURL;
-  String time;
-  Chat({@required this.name,@required this.messageText,@required this.imageURL,@required this.time});
-}

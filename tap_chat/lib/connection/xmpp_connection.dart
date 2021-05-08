@@ -1,9 +1,14 @@
+import 'package:tap_chat/chat/chat.dart';
+import 'package:tap_chat/connection/chat_center.dart';
+import 'package:tap_chat/connection/messages_center.dart';
 import 'package:tap_chat/connection/user_creditionals.dart';
 import 'package:xmpp_stone/xmpp_stone.dart' as xmpp;
 
 class XmppConnection {
   UserCreditionals _userCreditionals;
   xmpp.Connection connection;
+  MessageCenter _messageCenter;
+  ChatCenter chatCenter;
 
   XmppConnection(this._userCreditionals);
 
@@ -14,6 +19,21 @@ class XmppConnection {
         host: 'localhost', resource: 'localhost');
     connection = xmpp.Connection(account);
     connection.connect();
+    chatCenter = ChatCenter(connection, _userCreditionals);
+  }
+
+  void startMessageListen(Function(Chat) onAddChat) {
+    _messageCenter = MessageCenter(connection);
+    chatCenter.subscribeOnChats((chat) => {addChat(onAddChat, chat)});
+  }
+
+  void addChat(Function(Chat) onAddChat, xmpp.Chat chat) {
+    print('Принято сообщение: ${chat.jid.domain}');
+    _messageCenter.subscribeOn(chat.jid, onAddChat(Chat(chat)));
+  }
+
+  void subscribeOnUser(xmpp.Jid jid, Function(xmpp.Message) onRecieve) {
+    _messageCenter.subscribeOn(jid, onRecieve);
   }
 
   bool isConnected() {

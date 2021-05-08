@@ -1,9 +1,9 @@
-import 'package:flutter/cupertino.dart';
-import 'package:xmpp_stone/xmpp_stone.dart';
+import 'package:xmpp_stone/xmpp_stone.dart' as xmpp;
 
-class Contact{
-  Jid jid;
+class Contact {
+  xmpp.Jid jid;
   String name;
   String imageURL;
-  Contact({@required this.jid, @required this.name, @required this.imageURL});
+
+  Contact(this.jid, this.name, this.imageURL);
 }
