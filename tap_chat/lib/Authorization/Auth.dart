@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import '../main.dart';
 import 'AlertForLogin.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginIn extends StatefulWidget {
   LoginIn({Key key}) : super(key: key);
@@ -9,7 +11,7 @@ class LoginIn extends StatefulWidget {
 }
 
 class Auth extends State<LoginIn> {
-  String login = "1";
+  String login = "";
   String pass = "";
 
   changeLogin(String text) {
@@ -20,9 +22,51 @@ class Auth extends State<LoginIn> {
     setState(() => pass = text);
   }
 
-  int x = 300;
+//метод авторизации
+  findUser(BuildContext context) async {
+    if (pass != "user" || login != "user") {
+      //вывод ошибки авторизации
+      Navigator.push(
+          context,
+          PageRouteBuilder(
+              opaque: false,
+              pageBuilder: (BuildContext context, _, __) => ErrorLogin()));
+    } else {
+      //вывод уведомления
+      Navigator.push(
+          context,
+          PageRouteBuilder(
+              opaque: false,
+              pageBuilder: (BuildContext context, _, __) => SuccesLogin()));
+      //кешируем, что user авторизован
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setBool('isUserLoggedIn', true);
+      //переход в приложение
+      Navigator.push(
+          context,
+          PageRouteBuilder(
+              opaque: false,
+              pageBuilder: (BuildContext context, _, __) => MyHomePage()));
+    }
+  }
+
+//проверка авторизован ли уже пользователь
+  checkUserIsLogin(BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isUserLoggedIn = (prefs.getBool('isUserLoggedIn') ?? false);
+    if (isUserLoggedIn)
+      Navigator.push(
+          context,
+          PageRouteBuilder(
+              opaque: false,
+              pageBuilder: (BuildContext context, _, __) => MyHomePage()));
+  }
+
+  //представление
   @override
   Widget build(BuildContext context) {
+    checkUserIsLogin(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -49,26 +93,7 @@ class Auth extends State<LoginIn> {
             ),
             RaisedButton(
               child: Text('Войти'),
-              onPressed: () => {
-                if (pass != "user" || login != "user")
-                  {
-                    Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                            opaque: false,
-                            pageBuilder: (BuildContext context, _, __) =>
-                                ErrorLogin()))
-                  }
-                else
-                  {
-                    Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                            opaque: false,
-                            pageBuilder: (BuildContext context, _, __) =>
-                                SuccesLogin()))
-                  }
-              },
+              onPressed: () => {findUser(context)},
             )
           ],
         ),

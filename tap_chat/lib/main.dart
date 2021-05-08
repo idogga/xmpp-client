@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tap_chat/Authorization/Auth.dart';
 import 'package:tap_chat/views/contactPage.dart';
 import 'package:tap_chat/views/profilePage.dart';
 
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.red,
       ),
-      home: MyHomePage(title: 'Chats'),
+      home: LoginIn(),
     );
   }
 }
@@ -51,13 +52,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   int _currentIndex = 1;
 
   void onTabTapped(int index) {
-   setState(() {
-     _currentIndex = index;
-   });
+    setState(() {
+      _currentIndex = index;
+    });
   }
 
   @override
@@ -69,11 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
 
-    final List<Widget> _children = [
-      ContactPage(),
-      ChatPage(),
-      ProfilePage()
-    ];
+    final List<Widget> _children = [ContactPage(), ChatPage(), ProfilePage()];
 
     return Scaffold(
       body: _children[_currentIndex],
