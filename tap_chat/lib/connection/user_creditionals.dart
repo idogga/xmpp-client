@@ -5,8 +5,8 @@ class UserCreditionals {
   String get jid => '$userName@$domain';
 
   UserCreditionals() {
-    password = "1234";
-    userName = "artyom";
-    domain = "tap";
+    password = "leonov";
+    userName = "leonov";
+    domain = "450d0675de28";
   }
 }
