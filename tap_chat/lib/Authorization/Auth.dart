@@ -28,7 +28,8 @@ class Auth extends State<LoginIn> {
 
 //метод авторизации
   checkUser() async {
-    var user = UserCreditionals(login, pass);
+    var user = UserCreditionals();
+    user.SetUser(login, pass);
     var conn = XmppConnection(user);
     conn.connect();
     ExampleConnectionStateChangedListener(conn.connection, context);

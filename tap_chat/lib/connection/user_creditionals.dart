@@ -1,12 +1,22 @@
 class UserCreditionals {
+  static final UserCreditionals _singleton = UserCreditionals._internal();
+
+  factory UserCreditionals() {
+    return _singleton;
+  }
+
+  UserCreditionals._internal();
+
   String password;
+
   String userName;
-  String domain;
+
+  String get domain => 'tap';
+
   String get jid => '$userName@$domain';
 
-  UserCreditionals() {
-    password = "1234";
-    userName = "artyom";
-    domain = "tap";
+  void SetUser(String login, String pass) {
+    password = pass;
+    userName = login;
   }
 }
