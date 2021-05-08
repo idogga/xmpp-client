@@ -42,13 +42,13 @@ class _MyHomePageState extends State<MyHomePage> {
   _MyHomePageState() {
     var creds = UserCreditionals();
     _connection = XmppConnection(creds);
-    _chatPage = ChatPage();
   }
 
   @override
   void initState() {
     super.initState();
     _connection.connect();
+    _chatPage = ChatPage(_connection.chatCenter);
     _connection.startMessageListen(_chatPage.addChat);
   }
 

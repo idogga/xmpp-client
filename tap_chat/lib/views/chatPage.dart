@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:tap_chat/chat/chat.dart';
+import 'package:tap_chat/connection/chat_center.dart';
 import 'package:tap_chat/widgets/chatList.dart';
 
 class ChatPage extends StatefulWidget {
   List<Chat> chats = <Chat>[];
+
+  ChatCenter chatCenter;
+
+  ChatPage(this.chatCenter);
 
   @override
   _ChatPageState createState() => _ChatPageState();
@@ -78,13 +83,7 @@ class _ChatPageState extends State<ChatPage> {
               padding: EdgeInsets.only(top: 16),
               physics: NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
-                return ChatList(
-                  name: widget.chats[index].name,
-                  time: widget.chats[index].time,
-                  imageUrl: widget.chats[index].imageUrl,
-                  messageText: widget.chats[index].messageText,
-                  isMessageRead: false,
-                );
+                return ChatList(widget.chats[index], widget.chatCenter);
               },
             ),
           ],

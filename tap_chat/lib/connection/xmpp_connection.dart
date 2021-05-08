@@ -8,7 +8,7 @@ class XmppConnection {
   UserCreditionals _userCreditionals;
   xmpp.Connection _connection;
   MessageCenter _messageCenter;
-  ChatCenter _chatCenter;
+  ChatCenter chatCenter;
 
   XmppConnection(this._userCreditionals);
 
@@ -19,16 +19,12 @@ class XmppConnection {
         host: 'localhost', resource: 'localhost');
     _connection = xmpp.Connection(account);
     _connection.connect();
-    var rosterManager = xmpp.RosterManager.getInstance(_connection);
-    rosterManager.queryForRoster();
-    var buddies = rosterManager.getRoster();
-    print(buddies);
+    chatCenter = ChatCenter(_connection, _userCreditionals);
   }
 
   void startMessageListen(Function(Chat) onAddChat) {
     _messageCenter = MessageCenter(_connection);
-    _chatCenter = ChatCenter(_connection);
-    _chatCenter.subscribeOnChats((chat) => {A(onAddChat, chat)});
+    chatCenter.subscribeOnChats((chat) => {A(onAddChat, chat)});
   }
 
   void A(Function(Chat) onAddChat, xmpp.Chat chat) {
