@@ -1,25 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:tap_chat/connection/user_creditionals.dart';
+import 'package:tap_chat/connection/xmpp_connection.dart';
+import 'package:tap_chat/contact/contactPageDelegate.dart';
+import 'package:tap_chat/contact/contactsHandler.dart';
 import 'package:tap_chat/models/Contact.dart';
 import 'package:tap_chat/widgets/contactList.dart';
+import 'package:xmpp_stone/xmpp_stone.dart';
 
 class ContactPage extends StatefulWidget {
   @override
   _ContactPageState createState() => _ContactPageState();
 }
 
-class _ContactPageState extends State<ContactPage> {
+class _ContactPageState extends State<ContactPage> with ContactPageDelegate{
 
-  List<Contact> contacts = [
-    Contact(name: "Артем Библенко", imageURL: "lib/images/default.png"),
-    Contact(name: "Рома Воронцов", imageURL: "lib/images/default.png"),
-    Contact(name: "Саша Леонов", imageURL: "lib/images/default.png"),
-    Contact(name: "Артем Библенко", imageURL: "lib/images/default.png"),
-    Contact(name: "Рома Воронцов", imageURL: "lib/images/default.png"),
-    Contact(name: "Саша Леонов", imageURL: "lib/images/default.png"),
-    Contact(name: "Артем Библенко", imageURL: "lib/images/default.png"),
-    Contact(name: "Рома Воронцов", imageURL: "lib/images/default.png"),
-    Contact(name: "Саша Леонов", imageURL: "lib/images/default.png")
-  ];
+  bool _progressVisible = true;
+
+  ContactsHandler _contactsHandler;
+  XmppConnection _connection;
+
+  _ContactPageState(){
+    _connection = new XmppConnection(new UserCreditionals());
+    _connection.connect();
+    _contactsHandler = new ContactsHandler(_connection, this);
+  }
+
+  List<Contact> contacts = [];
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +35,26 @@ class _ContactPageState extends State<ContactPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            SafeArea(
+            GetTitle(),
+            GetSearch(),
+            GetContactList(),
+            GetProgressIndicator(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  void UpdateState(List<Buddy> buddies) {
+    setState(() {
+      contacts = buddies.map((value) => new Contact(name: value.name, imageURL: "lib/images/default.png")).toList();
+      _progressVisible = false;
+    });
+  }
+
+  Widget GetTitle(){
+    return SafeArea(
               child: Padding(
                 padding: EdgeInsets.only(left: 20,right: 20,top: 10),
                 child: Row(
@@ -54,8 +79,11 @@ class _ContactPageState extends State<ContactPage> {
                   ],
                 ),
               ),
-            ),
-            Padding(
+            );
+  }
+
+  Widget GetSearch(){
+    return Padding(
               padding: EdgeInsets.only(top: 16,left: 20,right: 20),
               child: TextField(
                 decoration: InputDecoration(
@@ -73,8 +101,11 @@ class _ContactPageState extends State<ContactPage> {
                   ),
                 ),
               ),
-            ),
-            ListView.builder(
+            );
+  }
+
+  Widget GetContactList(){
+    return ListView.builder(
               itemCount: contacts.length,
               shrinkWrap: true,
               padding: EdgeInsets.only(top: 16),
@@ -85,10 +116,25 @@ class _ContactPageState extends State<ContactPage> {
                   imageUrl: contacts[index].imageURL,
                 );
               },
-            ),
-          ],
-        ),
-      ),
-    );
+            );
+  }
+
+  Widget GetProgressIndicator(){
+    return Visibility(
+              visible: _progressVisible,
+              child:
+              Center(
+                child: 
+                  SizedBox(
+                    width: 100,
+                    height: 100,
+                    child: 
+                      CircularProgressIndicator(
+                        backgroundColor: Colors.grey,
+                        valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
+                      ),
+                ),            
+              ) 
+            );
   }
 }
