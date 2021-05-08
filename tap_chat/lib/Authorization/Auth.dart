@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:tap_chat/Authorization/ExampleConnectionStateChangedListener.dart';
+import 'package:tap_chat/connection/user_creditionals.dart';
+import 'package:tap_chat/connection/xmpp_connection.dart';
 import '../main.dart';
-import 'AlertForLogin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:xmpp_stone/xmpp_stone.dart' as xmpp;
 
 class LoginIn extends StatefulWidget {
   LoginIn({Key key}) : super(key: key);
@@ -23,31 +27,11 @@ class Auth extends State<LoginIn> {
   }
 
 //метод авторизации
-  findUser(BuildContext context) async {
-    if (pass != "user" || login != "user") {
-      //вывод ошибки авторизации
-      Navigator.push(
-          context,
-          PageRouteBuilder(
-              opaque: false,
-              pageBuilder: (BuildContext context, _, __) => ErrorLogin()));
-    } else {
-      //вывод уведомления
-      Navigator.push(
-          context,
-          PageRouteBuilder(
-              opaque: false,
-              pageBuilder: (BuildContext context, _, __) => SuccesLogin()));
-      //кешируем, что user авторизован
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setBool('isUserLoggedIn', true);
-      //переход в приложение
-      Navigator.push(
-          context,
-          PageRouteBuilder(
-              opaque: false,
-              pageBuilder: (BuildContext context, _, __) => MyHomePage()));
-    }
+  checkUser() async {
+    var user = UserCreditionals(login, pass);
+    var conn = XmppConnection(user);
+    conn.connect();
+    ExampleConnectionStateChangedListener(conn.connection, context);
   }
 
 //проверка авторизован ли уже пользователь
@@ -93,7 +77,7 @@ class Auth extends State<LoginIn> {
             ),
             RaisedButton(
               child: Text('Войти'),
-              onPressed: () => {findUser(context)},
+              onPressed: () => {checkUser()},
             )
           ],
         ),
