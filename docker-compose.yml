@@ -13,7 +13,7 @@ services:
     environment:
       POSTGRES_DB: tigase
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 550248qweR
+      POSTGRES_PASSWORD: <YOUR_PASSWORD>
     ports:
       - 9591:5432
 
@@ -23,7 +23,7 @@ services:
     environment:
       PGHOST: xmpp_db
       PGUSER: postgres
-      PGPASSWORD: 550248qweR
+      PGPASSWORD: <YOUR_PASSWORD>
       ADMIN_PASSWORD: 1234
     ports:
       - 5222:5222
