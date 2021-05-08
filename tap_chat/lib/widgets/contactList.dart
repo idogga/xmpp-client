@@ -18,7 +18,7 @@ class _ContactListState extends State<ContactList> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: goToChat,
       child: Container(
         padding: EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
         child: Row(
@@ -40,7 +40,7 @@ class _ContactListState extends State<ContactList> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            widget.contact.name,
+                            widget.contact.name ?? 'Без имени',
                             style: TextStyle(fontSize: 16),
                           ),
                         ],

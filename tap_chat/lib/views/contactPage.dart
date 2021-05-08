@@ -12,6 +12,8 @@ import 'package:xmpp_stone/xmpp_stone.dart';
 class ContactPage extends StatefulWidget {
   XmppConnection connection;
   ChatCenter chatCenter;
+  String filter;
+
   ContactPage(this.connection, this.chatCenter);
   @override
   _ContactPageState createState() => _ContactPageState(connection);
@@ -19,6 +21,7 @@ class ContactPage extends StatefulWidget {
 
 class _ContactPageState extends State<ContactPage> with ContactPageDelegate {
   bool _progressVisible = true;
+  final textController = TextEditingController();
 
   _ContactPageState(XmppConnection connection) {
     var _ = new ContactsHandler(connection, this);
@@ -28,6 +31,38 @@ class _ContactPageState extends State<ContactPage> with ContactPageDelegate {
 
   List<Contact> subscribers = [];
 
+  List<Contact> getFilteredContacts() {
+    return contacts
+        .where((chat) => widget.filter.isEmpty
+            ? true
+            : chat.jid.userAtDomain
+                .toLowerCase()
+                .contains(widget.filter.toLowerCase()))
+        .toList();
+  }
+
+  List<Contact> getFilteredSubscribers() {
+    return subscribers
+        .where((chat) => widget.filter.isEmpty
+            ? true
+            : chat.jid.userAtDomain
+                .toLowerCase()
+                .contains(widget.filter.toLowerCase()))
+        .toList();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    textController.addListener(_searchValues);
+  }
+
+  @override
+  void dispose() {
+    textController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,14 +71,14 @@ class _ContactPageState extends State<ContactPage> with ContactPageDelegate {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            GetTitle(),
-            GetSearch(),
-            GetSubscribesList(),
+            getTitle(),
+            getSearch(),
+            getSubscribesList(),
             Divider(
               color: Colors.black,
             ),
-            GetContactList(),
-            GetProgressIndicator(),
+            getContactList(),
+            getProgressIndicator(),
           ],
         ),
       ),
@@ -70,7 +105,7 @@ class _ContactPageState extends State<ContactPage> with ContactPageDelegate {
     });
   }
 
-  Widget GetTitle() {
+  Widget getTitle() {
     return SafeArea(
       child: Padding(
         padding: EdgeInsets.only(left: 20, right: 20, top: 10),
@@ -111,10 +146,11 @@ class _ContactPageState extends State<ContactPage> with ContactPageDelegate {
     );
   }
 
-  Widget GetSearch() {
+  Widget getSearch() {
     return Padding(
       padding: EdgeInsets.only(top: 16, left: 20, right: 20),
       child: TextField(
+        controller: textController,
         decoration: InputDecoration(
           hintText: "Поиск...",
           hintStyle: TextStyle(color: ThemeColors.darkGrey),
@@ -134,31 +170,31 @@ class _ContactPageState extends State<ContactPage> with ContactPageDelegate {
     );
   }
 
-  Widget GetContactList() {
+  Widget getContactList() {
     return ListView.builder(
-      itemCount: contacts.length,
+      itemCount: getFilteredSubscribers().length,
       shrinkWrap: true,
       padding: EdgeInsets.only(top: 16),
       physics: NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
-        return ContactList(contacts[index], widget.chatCenter);
+        return ContactList(getFilteredSubscribers()[index], widget.chatCenter);
       },
     );
   }
 
-  Widget GetSubscribesList() {
+  Widget getSubscribesList() {
     return ListView.builder(
-      itemCount: subscribers.length,
+      itemCount: getFilteredSubscribers().length,
       shrinkWrap: true,
       padding: EdgeInsets.only(top: 16),
       physics: NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
-        return ContactList(subscribers[index], widget.chatCenter);
+        return ContactList(getFilteredSubscribers()[index], widget.chatCenter);
       },
     );
   }
 
-  Widget GetProgressIndicator() {
+  Widget getProgressIndicator() {
     return Visibility(
         visible: _progressVisible,
         child: Center(
@@ -171,5 +207,10 @@ class _ContactPageState extends State<ContactPage> with ContactPageDelegate {
             ),
           ),
         ));
+  }
+
+  void _searchValues() {
+    widget.filter = textController.text;
+    setState(() {});
   }
 }
