@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tap_chat/connection/chat_center.dart';
+import 'package:tap_chat/connection/user_creditionals.dart';
 import 'package:tap_chat/connection/xmpp_connection.dart';
 import 'package:tap_chat/contact/contactPageDelegate.dart';
 import 'package:tap_chat/contact/contactsHandler.dart';
@@ -21,7 +22,8 @@ class _ContactPageState extends State<ContactPage> with ContactPageDelegate {
   bool _progressVisible = true;
 
   _ContactPageState(XmppConnection connection) {
-    var _ = new ContactsHandler(connection, this);
+    var conn = new XmppConnection(UserCreditionals());
+    var _ = new ContactsHandler(conn, this);
   }
 
   List<Contact> contacts = [];
