@@ -35,3 +35,21 @@ class SuccesLogin extends StatelessWidget {
     );
   }
 }
+
+class NotFountServer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('Внимание'),
+      content: Text('Нет соединения с сервером'),
+      actions: [
+        FlatButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text('ОК'),
+        ),
+      ],
+    );
+  }
+}

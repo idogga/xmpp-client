@@ -54,21 +54,26 @@ class Auth extends State<LoginIn> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: Text(
           'Авторизация',
+          style: TextStyle(color: Colors.black),
         ),
       ),
-      body: Container(
+      body: Center(
         child: Column(
-          children: [
-            Card(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            new Container(
+              width: 300,
               child: TextField(
                 onChanged: changeLogin,
                 autocorrect: true,
                 decoration: InputDecoration(labelText: 'Login'),
               ),
             ),
-            Card(
+            new Container(
+              width: 300,
               child: TextField(
                 onChanged: changePass,
                 obscureText: true,
@@ -76,9 +81,17 @@ class Auth extends State<LoginIn> {
                 decoration: InputDecoration(labelText: 'Password'),
               ),
             ),
-            RaisedButton(
-              child: Text('Войти'),
-              onPressed: () => {checkUser()},
+            new Padding(
+              padding: new EdgeInsets.only(top: 25.0),
+              child: new MaterialButton(
+                color: Theme.of(context).accentColor,
+                height: 50.0,
+                minWidth: 150.0,
+                child: new Text(
+                  "LOGIN",
+                ),
+                onPressed: () => {checkUser()},
+              ),
             )
           ],
         ),
