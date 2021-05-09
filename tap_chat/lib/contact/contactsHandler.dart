@@ -15,13 +15,11 @@ class ContactsHandler {
   ContactsHandler(
       XmppConnection connection, ContactPageDelegate contactPageDelegate) {
     connection.connect();
-    _connection = connection.GetConnection();
+    _connection = connection.connection;
 
     var presenceManager = xmpp.PresenceManager.getInstance(_connection);
     var rosterManager = xmpp.RosterManager.getInstance(_connection);
     var cardManager = xmpp.VCardManager.getInstance(_connection);
-
-    var jid = xmpp.Jid.fromFullJid("admin@tap");
 
     _contactPageDelegate = contactPageDelegate;
     _rosterManager = rosterManager;
