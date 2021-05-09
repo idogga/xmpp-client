@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:tap_chat/connection/xmpp_connection.dart';
 import 'package:tap_chat/contact/contactPageDelegate.dart';
 import 'package:tap_chat/dto/contactDto.dart';

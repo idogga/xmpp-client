@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tap_chat/connection/xmpp_connection.dart';
 import 'package:xmpp_stone/xmpp_stone.dart' as xmpp;
 
 import '../main.dart';
@@ -7,15 +7,16 @@ import 'AlertForLogin.dart';
 
 class ExampleConnectionStateChangedListener
     implements xmpp.ConnectionStateChangedListener {
-  xmpp.Connection _connection;
+  XmppConnection _connection;
   BuildContext _context;
 
   ExampleConnectionStateChangedListener(
-      xmpp.Connection connection, BuildContext context) {
+      XmppConnection connection, BuildContext context) {
     _context = context;
     _connection = connection;
 
-    _connection.connectionStateStream.listen(onConnectionStateChanged);
+    _connection.connection.connectionStateStream
+        .listen(onConnectionStateChanged);
   }
 
   //ошибка авторизации
@@ -52,7 +53,8 @@ class ExampleConnectionStateChangedListener
         _context,
         PageRouteBuilder(
             opaque: false,
-            pageBuilder: (BuildContext context, _, __) => MyHomePage()));
+            pageBuilder: (BuildContext context, _, __) =>
+                MyHomePage("BBBB", _connection)));
   }
 
   @override
@@ -67,7 +69,7 @@ class ExampleConnectionStateChangedListener
     }
     if (state == xmpp.XmppConnectionState.Ready) {
       print('Connected');
-      var vCardManager = xmpp.VCardManager(_connection);
+      var vCardManager = xmpp.VCardManager(_connection.connection);
       vCardManager.getSelfVCard().then((vCard) {
         if (vCard != null) {
           print('Your info' + vCard.buildXmlString());

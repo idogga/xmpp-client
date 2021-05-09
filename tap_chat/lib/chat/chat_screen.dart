@@ -8,7 +8,7 @@ import 'chat_screen_state.dart';
 class ChatScreen extends StatefulWidget {
   Chat chat;
   ChatCenter chatCenter;
-  UserCreditionals get user => chatCenter.userCreditionals;
+  UserCreditionals get user => UserCreditionals();
 
   ChatScreen(this.chat, this.chatCenter);
 
