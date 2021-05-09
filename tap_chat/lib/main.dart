@@ -27,12 +27,13 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage(this.title, this.connection);
 
   final String title;
+  final XmppConnection connection;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MyHomePageState createState() => _MyHomePageState(connection);
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -40,10 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
   XmppConnection _connection;
   ChatPage _chatPage;
 
-  _MyHomePageState() {
-    var creds = UserCreditionals();
-    _connection = XmppConnection(creds);
-  }
+  _MyHomePageState(this._connection);
 
   @override
   void initState() {
