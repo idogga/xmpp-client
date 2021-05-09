@@ -32,19 +32,25 @@ class Auth extends State<LoginIn> {
     user.SetUser(login, pass);
     var conn = XmppConnection(user);
     conn.connect();
-    ExampleConnectionStateChangedListener(conn.connection, context);
+    ExampleConnectionStateChangedListener(conn, context);
   }
 
 //проверка авторизован ли уже пользователь
   checkUserIsLogin(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool isUserLoggedIn = (prefs.getBool('isUserLoggedIn') ?? false);
-    if (isUserLoggedIn)
+    if (isUserLoggedIn) {
+      var user = UserCreditionals();
+      user.SetUser(login, pass);
+      var conn = XmppConnection(user);
+      conn.connect();
       Navigator.push(
           context,
           PageRouteBuilder(
               opaque: false,
-              pageBuilder: (BuildContext context, _, __) => MyHomePage()));
+              pageBuilder: (BuildContext context, _, __) =>
+                  MyHomePage("AAA", conn)));
+    }
   }
 
   //представление

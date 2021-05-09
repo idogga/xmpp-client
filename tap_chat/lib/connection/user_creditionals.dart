@@ -16,7 +16,9 @@ class UserCreditionals {
   String get jid => '$userName';
 
   void SetUser(String login, String pass) {
-    password = pass;
-    userName = login;
+    password = "1234";
+    //pass;
+    userName = "artyom@tap";
+    // login;
   }
 }
