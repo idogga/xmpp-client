@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:tap_chat/connection/xmpp_connection.dart';
 import 'package:tap_chat/contact/contactPageDelegate.dart';
 import 'package:tap_chat/dto/contactDto.dart';
@@ -15,7 +14,8 @@ class ContactsHandler {
 
   ContactsHandler(
       XmppConnection connection, ContactPageDelegate contactPageDelegate) {
-    _connection = connection.connection;
+    connection.connect();
+    _connection = connection.GetConnection();
 
     var presenceManager = xmpp.PresenceManager.getInstance(_connection);
     var rosterManager = xmpp.RosterManager.getInstance(_connection);
@@ -31,21 +31,11 @@ class ContactsHandler {
       sendBuddies();
     });
 
-    presenceManager.subscribe(jid);
-
-    presenceManager.errorStream.listen((event) {
-      var b = event;
-    });
-
-    presenceManager.presenceStream.listen((event) {
-      var b = event.jid;
-    });
-
     presenceManager.subscriptionStream.listen((streamEvent) {
       if (streamEvent.type == xmpp.SubscriptionEventType.REQUEST) {
         var vcard = cardManager.getVCardFor(streamEvent.jid);
         vcard.asStream().listen((event) {
-          var contactDto = ContactDto(streamEvent.jid, event.nickName, "");
+          var contactDto = ContactDto(streamEvent.jid, event.nickName ?? streamEvent.jid.local, "");
           _contactPageDelegate.UpdateSubscribers(contactDto);
         });
       }
